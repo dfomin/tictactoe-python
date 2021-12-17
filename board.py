@@ -17,7 +17,7 @@ BOARD_PATHS = [
 
 
 class TicTacToeBoard:
-    def __init__(self, board: np.array = np.zeros(BOARD_SIZE), current_player: int = 0):
+    def __init__(self, board: np.array = np.zeros(BOARD_SIZE, dtype=int), current_player: int = 0):
         if board.shape != (BOARD_SIZE,):
             raise ValueError("Wrong board size")
 
