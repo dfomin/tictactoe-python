@@ -1,3 +1,5 @@
+import numbers
+
 import numpy as np
 
 BOARD_SIZE = 9
@@ -15,11 +17,16 @@ BOARD_PATHS = [
 
 
 class TicTacToeBoard:
-    def __init__(self):
-        self._board = np.zeros(BOARD_SIZE)
+    def __init__(self, board: np.array = np.zeros(BOARD_SIZE), current_player: int = 0):
+        if board.shape != (BOARD_SIZE,):
+            raise ValueError("Wrong board size")
+
+        self._board = board
         self._is_finished = False
         self._winner = None
-        self._player_index = 0
+        self._player_index = current_player
+
+        self.check_end_game()
 
     def __repr__(self):
         result = ""
@@ -42,8 +49,8 @@ class TicTacToeBoard:
         if self.is_finished():
             raise ValueError("Game is over")
 
-        if not type(position) is int:
-            raise TypeError("Position must be int")
+        if isinstance(type(position), numbers.Integral):
+            raise TypeError(f"Position must be int, {type(position)} was given")
 
         if position not in self.possible_moves():
             raise ValueError(f"Position: {position} is unavailable, available positions: {self.possible_moves()}")
@@ -60,12 +67,14 @@ class TicTacToeBoard:
 
     def check_end_game(self):
         for path in BOARD_PATHS:
-            indices = np.arange(path[0], BOARD_SIZE, path[1])
+            indices = np.arange(path[0], path[0] + 3 * path[1], path[1])
             for i in range(2):
                 if (self._board[indices] == i + 1).all():
                     self._is_finished = True
                     self._winner = i
                     return
+
+        self._is_finished = (self._board != 0).all()
 
     def is_finished(self):
         return self._is_finished
