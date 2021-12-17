@@ -22,7 +22,10 @@ def main():
             print(e)
 
     print(board)
-    print(f"Winner is {board.winner()}")
+    if board.winner() is None:
+        print("Draw")
+    else:
+        print(f"Winner is {'X' if board.winner() == 0 else 'O'}")
 
 
 if __name__ == '__main__':
