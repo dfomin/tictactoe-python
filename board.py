@@ -1,4 +1,5 @@
 import numbers
+import random
 
 import numpy as np
 
@@ -25,6 +26,7 @@ class TicTacToeBoard:
         self._is_finished = False
         self._winner = None
         self._player_index = current_player
+        self._hash_cache = 0
 
         self.check_end_game()
 
@@ -45,6 +47,15 @@ class TicTacToeBoard:
                 result += "\n-----\n"
         return result
 
+    def update_hash(self):
+        self._hash_cache = 0
+        for value in self._board:
+            self._hash_cache += value
+            self._hash_cache *= 3
+
+    def hash(self):
+        return self._hash_cache
+
     def move(self, position: int):
         if self.is_finished():
             raise ValueError("Game is over")
@@ -57,6 +68,8 @@ class TicTacToeBoard:
 
         self._board[position] = self._player_index + 1
         self._player_index = 1 - self._player_index
+
+        self.update_hash()
 
         self.check_end_game()
 
